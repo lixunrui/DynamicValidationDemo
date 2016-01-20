@@ -1,0 +1,115 @@
+﻿<Window x:Class="DynamicValidationDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DynamicValidationDemo"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid Name="GridList">
+        
+        <Grid.Resources>
+            <Style x:Key="TextBoxStyle" TargetType="TextBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Width" Value="210"/>
+                <EventSetter Event="TextBox.GotFocus" Handler="TextBox_GotFocus" />
+                
+                <!-- display error message 
+                Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                                        <Border BorderBrush="Red" BorderThickness="1"
+                -->
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value ="true" >
+                        <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <TextBlock DockPanel.Dock="Bottom" Foreground="Red" 
+                                               Text="{Binding ElementName=errorHint, 
+                                        Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                                        <Border BorderBrush="Red" BorderThickness="1"
+                                                
+                                                >
+                                            
+                                           
+                                            <AdornedElementPlaceholder Name="errorHint" />
+                                        </Border>
+                                    </DockPanel>                    
+                            </ControlTemplate>
+                        </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+                
+                
+            </Style>
+
+            <Style x:Key="TextBoxStyle2" TargetType="TextBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Width" Value="210"/>
+                <EventSetter Event="TextBox.GotFocus" Handler="TextBox_GotFocus" />
+
+                <!-- display error message 
+                Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                                        <Border BorderBrush="Red" BorderThickness="1"
+                -->
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value ="true" >
+                        <Setter Property="Background" Value="Red" />
+                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, 
+                            Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+
+
+            </Style>
+            
+            
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        
+        <!-- check -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3">
+                <TextBlock Text="Name:"/>
+                <TextBox Name="txtName" Style="{StaticResource TextBoxStyle2}" HorizontalAlignment="Stretch">
+                    <TextBox.Text>
+                        <Binding Path="Name" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+            <TextBlock   Height="31" HorizontalAlignment="Left" Name="txtNameHint" Foreground="Red" FontSize="14" VerticalAlignment="Top" Width="120" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3">
+                <TextBlock Text="Other" />
+                <TextBox Style="{StaticResource TextBoxStyle}" Name="txtOther">
+                    <TextBox.Text>
+                        <Binding Path="Other" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <local:IsNullValidationRule2 ErrorMessage="not null, not less than 20"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+            <Button Content="Check" Click="BTN_Clicked" />
+        </StackPanel>
+        
+        
+        <!--code check-->
+        <TextBox Grid.Row="1" Grid.Column="1" Width="100" VerticalAlignment="Center" Background="Aqua"/>
+    </Grid>
+</Window>
